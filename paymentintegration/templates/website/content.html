@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}contenido{% endblock %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-9">
+        <h2>Contenido</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a><strong>contenido</strong></a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-3 p-3">
+        <a href="{% url 'content_create' %}" class="btn btn-info" type="button"><i class="fa fa-paste"></i>  Nueva</a>
+        <a href="{% url 'content_pending' %}" class="btn btn-danger" type="button">Pendiente</a>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% if just_posted %}
+        <div class="row">
+            <div class="col-md-12 ibox-content ibox-heading">
+                Tu publicación ha sido enviada! Está en estado de revisión. En cuanto sea aprobada se te sumarán los Créditos!<br/>
+                Gracias por Aportar!<br/>
+                <a href="/article_list">Haga click aquí para retornar a la Plataforma.</a>
+            </div>
+        </div>  
+        {% endif %}
+    <div class="row">
+        
+        {% for content in content_list %}
+        <div class="col-md-3">
+            <div class="ibox">
+                <div class="ibox-content product-box">
+                    <div class="product-desc">
+                        <small class="text-muted">Contenido</small>
+                        <a href="{% url 'content_update' content.id %}" class="product-name" style="word-break: break-word;">{{content.title}}</a>
+                        <div class="small m-t-xs">
+                            {{content.description|safe|escape }}
+                        </div>
+                        <div class="m-t text-righ">
+                            <a href="{% url 'content_detail' content.pk %}" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-md-12">
+            Aún no tienes contenido enviado.
+        </div>
+        {% endfor %}
+        
+    </div>
+</div>
+<!-- Custom and plugin javascript -->
+<script src="{% static 'js/inspinia.js' %}"></script>
+<script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Administrador{% endblock %}
+{% block content %}
+<link href="{% static 'css/plugins/dataTables/datatables.min.css' %}" rel="stylesheet">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Administrador</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a><strong>Administrador</strong></a>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover dataTables-example" >
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>descripción</th>
+                    <th>Nombre de usuario</th>
+                    <th>Apellido</th>
+                    <th>Fetcha</th>
+                    <th>Categoría</th>
+                    <!--th>Usuario</th-->
+                    <th>País</th>
+                    <th>Ciudad</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for content in content_list %}
+                <tr class="gradeX">
+                    <td>{{content.title}}</td>
+                    <td>{{content.description|truncatewords:20|safe|escape}}</td>
+                    <td>{{content.username}}</td>
+                    <td>{{content.surname}}</td>
+                    <td class="center">{{content.date|date:"M d, Y h:i A"}}</td>
+                    <td class="center"><button class="btn btn-success btn-xs" type="button">{{content.category}}</button></td>
+                    <!--td class="center">{{content.user.username}}</td-->
+                    <td class="center">{{content.country.name}}</td>
+                    <td class="center">{{content.city.name}}</td>
+                    
+                    {% if content.approved == False %}
+                    <td>
+                        <span class="badge badge-warning" data-toggle="modal" data-target="#approve_modal_{{content.id}}">Pendiente</span></a>
+                    </td>
+                    {% else %}
+                    <td>
+                        <span class="badge badge-success">Aprobado</span>
+                    </td>
+                    {% endif %}
+                    <div class="modal inmodal" id="approve_modal_{{content.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content animated bounceInRight">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <i class="fa fa-laptop modal-icon"></i>
+                                    <h5 class="modal-title">{{content.title}}</h5>
+                                </div>
+
+                                <div class="float-left p-3">
+                                    <button class="btn btn-success btn-xs" type="button">{{content.category}}</button>
+                                    <button class="btn btn-danger btn-xs" type="button">{{content.country.name}}</button>
+                                    <button class="btn btn-warning btn-xs" type="button">{{content.city.name}}</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>{{content.description|safe|escape}}</p>
+                                </div>
+                                <input type="hidden" id="content_id_sel" value="-1" />
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                                    <a href="#" type="button" onclick="content_approve('{{content.id}}')" class="btn btn-primary">Aprobado</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+<script src="{% static 'js/plugins/dataTables/datatables.min.js' %}"></script>
+<script src="{% static 'js/plugins/dataTables/dataTables.bootstrap4.min.js' %}"></script>
+<!-- Custom and plugin javascript -->
+<script src="{% static 'js/inspinia.js' %}"></script>
+<script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+<!-- Page-Level Scripts -->
+<script>
+    function content_approve(id){
+        var url = "{% url 'approve_content' %}";
+        var token = '{{csrf_token}}';
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            method: 'POST',
+            url: url,
+            data: {
+                'value': id
+            },
+            success: function(data) {
+                if(data == 'Ok') {
+                    location.reload();
+                }
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function(){
+        $('.dataTables-example').DataTable({
+            pageLength: 25,
+            responsive: true,
+            dom: '<"html5buttons"B>lTfgitp',
+            buttons: [
+                { extend: 'copy'},
+                {extend: 'csv'},
+                {extend: 'excel', title: 'ExampleFile'},
+                {extend: 'pdf', title: 'ExampleFile'},
+
+                {extend: 'print',
+                    customize: function (win){
+                        $(win.document.body).addClass('white-bg');
+                        $(win.document.body).css('font-size', '10px');
+
+                        $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+                }
+                }
+            ]
+
+        });
+
+    });
+
+</script>
+{% endblock %}

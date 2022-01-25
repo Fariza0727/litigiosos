@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+{% load static %}
+{% load socialaccount %}
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Sign In" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shorcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+
+    <title>Litigiosos.com | Iniciar Sesión</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body class="green-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">Litigiosos</h1>
+
+            </div>
+            <div class="text-center">  
+                {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>{{ error }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="text-center">
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="ibox-content">
+
+                <form class="form needs-validation" action="." method="POST" novalidate="novalidate">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input name="username" id="username" type="text" class="form-control" placeholder="Email" autofocus required />
+                        <div class="invalid-feedback">
+                            Introduzca su usuario
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input name="password" type="password" class="form-control" placeholder="Contraseña" required />
+                        <div class="invalid-feedback">
+                            Introduzca su contraseña
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b">Iniciar Sesión</button>
+
+                    <a href="#">
+                        <small>¿Olvidaste tu contraseña?</small>
+                    </a>
+                    
+                    <p class="text-muted text-center">
+                        <small>¿No tiene una cuenta?</small>
+                    </p>
+                    <a class="btn btn-sm btn-info btn-block" href="{% url 'view_singup' %}">Regístrate Gratis</a>
+                    <div class="pt-4">
+                        <a class="btn btn-sm btn-danger btn-block" href="{% provider_login_url 'google' %}" process="login"><i class="fa fa-google"> </i>&nbsp;&nbsp;&nbsp;Iniciar sesión con google</a>
+                        <a class="btn btn-sm btn-success btn-block" href="{% provider_login_url 'facebook' method='oauth2' %}"><i class="fa fa-facebook"> </i>&nbsp;&nbsp;&nbsp;Iniciar sesión con Facebook</a>
+                    </div>
+                </form>
+            </div>
+            <p class="m-t" style="color: white;"> <small>Bootstrap 4 &copy; {% now "Y" %}</small> </p>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/validations.js' %}"></script>
+</body>
+
+</html>

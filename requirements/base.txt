@@ -1,0 +1,8 @@
+django==3.1.6
+#django-simple-captcha==0.5.13
+django-payments-mercadopago
+mercadopago==1.2.0
+django-autocomplete-light
+django-cities-light
+django-allauth
+django-import-export

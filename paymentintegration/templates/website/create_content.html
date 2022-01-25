@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Contenido Crear{% endblock %}
+{% block content %}
+<link href="{% static 'css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Contenido Crear</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a><strong>Contenido Crear</strong></a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-12">
+        <div class="ibox ">
+
+            <div class="ibox-content">
+                <div class="panel-body">
+                    <fieldset>
+                        <form id="content_create" class="needs-validation" method="POST" action="." enctype='multipart/form-data' novalidate>
+                            {% csrf_token %}
+                          <!--   <div class="form-group row"><label class="col-sm-2 col-form-label">Titulo:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="title" required>
+                                    <div class="invalid-feedback">
+                                        Introduzca el primer título
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="form-group row"><label class="col-sm-2 col-form-label">Nombre:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="username" required>
+                                    <div class="invalid-feedback">
+                                        Introduzca el nombre, o nombres de la persona reportada.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row"><label class="col-sm-2 col-form-label">Apellido:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="surname" required>
+                                    <div class="invalid-feedback">
+                                        Introduzca el apellido, o apellidos de la persona reportada.
+                                    </div>
+                                </div>
+                            </div>
+                           <!--  <div class="form-group row"><label class="col-sm-2 col-form-label">:</label>
+                                <div class="col-sm-10">
+                                    
+                                    <input class="tagsinput form-control" name="category" id="category_tags" type="text" required>
+                                    <div class="invalid-feedback">
+                                        Introduzca una descripción
+                                    </div>
+                                </div>
+                            </div> -->
+                            <input class="xtagsinput form-control" name="category" id="category_tags" type="hidden" value="general">
+                            <div class="form-group row"><label class="col-sm-2 col-form-label">País:</label>
+                                <div class="col-sm-3">
+                                    
+                                    <input type="hidden" name="country" value="11" >
+                                    <input type="text" name="country_view" value="Argentina" disabled="true">
+                                    <div class="invalid-feedback">
+                                         Introduzca nuevamente la contraseña
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row"><label class="col-sm-2 col-form-label">Ciudad:</label>
+                                <div class="col-sm-6">
+                                    
+                                    {{ form.city}}
+                                    {{form.media}}
+                                    <div class="invalid-feedback">
+                                         Introduzca una contraseña
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row"><label class="col-sm-2 col-form-label">Texto a Publicar:</label>
+                                <div class="col-sm-10">
+                                    
+                                    <textarea type="text" class="form-control" name="description" id='description' required></textarea>
+                                    <div class="invalid-feedback">
+                                        Introduzca una descripción
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="voting" name="voting" value="-1" />
+                            
+                            <input type="hidden" value="{{request.user.id}}" name = "user" />
+                            <div class="form-group row text-center">
+                                <a id="content_submit" class="btn btn-primary btn-sm">Enviar a Revisión</a>
+                            </div>
+                        </form>
+                    </fieldset>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="content_check" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">Por favor seleccione la opción</h4>
+            </div>
+            
+            <div class="modal-footer">
+                <a id="only_post" type="button" class="btn btn-info">solo post registrado</a>
+                <a id="voting_post" type="button" class="btn btn-primary">Permitir votar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Custom and plugin javascript -->
+<script src="{% static 'js/inspinia.js' %}"></script>
+<script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+<script src="{% static 'js/validations.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/ckeditor/ckeditor.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/plugins/ckeditor/adapters/jquery.js' %}"></script>
+<!-- Tags Input -->
+<script src="{% static 'js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('.tagsinput').tagsinput({
+            tagClass: 'label label-primary'
+        });
+        $("#id_country").addClass('form-control');
+    })
+
+    $("#content_submit").click(function(e){
+        my_form = $('#content_create');
+        my_form.submit();
+        // $("#content_check").modal();
+        // my_form = $('#content_create');
+        // $("#voting_post").click(function(e){
+        //     $("#voting").val(true);
+        //     e.preventDefault();
+        //     my_form.submit();
+        // });
+        // $("#only_post").click(function(e){
+        //     $("#voting").val(false);
+        //     e.preventDefault();
+        //     my_form.submit();
+        // });
+    })
+</script>
+
+<script type="text/javascript">            
+    // jquery document ready function
+    $(function(){                    
+        // 1. change the textarea into an editor
+        CKEDITOR.replace( 'description',
+            {
+                toolbar :
+                [
+                    { name: 'basicstyles', items : [ 'Bold','Italic','Underline', 'Strike', 'Subscript', 'Superscript' ] },
+                    { name: 'paragraph', items : [ 'NumberedList','BulletedList' ] },
+                    { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+                    { name: 'colors', items : [ 'TextColor','BGColor' ] },
+                    { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+                    { name: 'insert', items: [ 'Image', 'Flash', 'Table' ] },
+                ]
+            });               
+    });    
+</script>
+{% endblock %}

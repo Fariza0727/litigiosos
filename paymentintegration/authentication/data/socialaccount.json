@@ -1,0 +1,14 @@
+[
+    {
+      "model": "socialaccount.socialapp",
+      "pk": 1,
+      "fields": {
+        "provider": "google",
+        "name": "Web client 1",
+        "client_id": "757652617283-sko8iueol1voctvgsvdov32ooptq12a0.apps.googleusercontent.com",
+        "key": "",
+        "secret": "mD5JIHwPBOfySuFv0pnZGVb-"
+
+      }
+    }
+]

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Sign In" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shorcut icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+
+    <title>Litigiosos.com | Inscribirse</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <!-- Mainly scripts -->
+    <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/signup.js' %}"></script>
+    <script src="{% static 'js/validations.js' %}"></script>
+</head>
+
+<body class="green-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">Litigiosos</h1>
+            </div>
+            <div class="text-center">
+                {% if messages %}
+                <ul class="messages" style="list-style: none;padding-left: 0px;">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                
+
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>{% if field.label %}{{field.label|escape}}: {% endif %} {{ error|escape }}</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>{% if field.label %}{{field.label|escape}}: {% endif %} {{ error|escape }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+                
+
+            <div class="ibox-content">
+
+                <form class="form needs-validation" action="." method="POST" novalidate="novalidate" id="signupForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input name="email" type="text" class="form-control" placeholder="Email" autofocus required />
+                        <div class="invalid-feedback">
+                            Introduzca su email
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="float-left" for="id_country">País</label>
+							{{ form.country }}
+                        <div class="invalid-feedback">
+                            Introduzca nuevamente la contraseña
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="float-left" for="id_city">Ciudad</label>
+                            {{form.city}}
+							{{form.media}}
+                    </div>
+                    <div class="form-group">
+                        <input name="password1" type="password" class="form-control" placeholder="Contraseña" required />
+                        <div class="invalid-feedback">
+                            Introduzca una contraseña
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input name="password2" type="password" class="form-control" placeholder="Confirmar Contraseña" required />
+                        <div class="invalid-feedback">
+                            Introduzca nuevamente la contraseña
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" name="aceptotic" id="id_tic" required> He leido y acepto los <a href="/terminosycondiciones" target="_blank">términos y condiciones</a>
+                        <div class="invalid-feedback">
+                            Debe aceptar los términos y condiciones.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary block full-width m-b">Confirmar</button>
+                    <a href="{% url 'view_login' %}">
+                        <small>Ir a Iniciar sesión</small>
+                    </a>
+                </form>
+            </div>
+            <p class="m-t" style="color: white;"> <small>Bootstrap 4 &copy; {% now "Y" %}</small> </p>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        $("#id_country").addClass('form-control');
+
+       
+    });
+</script>
+</html>

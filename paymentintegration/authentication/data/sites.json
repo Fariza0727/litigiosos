@@ -1,0 +1,18 @@
+[
+    {
+      "model": "sites.site",
+      "pk": 1,
+      "fields": {
+        "name": "example.com",
+        "domain": "example.com"
+      }
+    },
+    {
+        "model": "sites.site",
+        "pk": 2,
+        "fields": {
+            "name": "127.0.0.1:8000",
+            "domain": "127.0.0.1:8000"
+        }
+    }
+]

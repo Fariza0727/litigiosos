@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}contenido detalhe{% endblock %}
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Detalle de contenido</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a><strong>Detalle de contenido</strong></a>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="ibox product-detail">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="font-bold m-b-xs">
+                                {{content_detail.username}} {{content_detail.surname}}
+                            </h2>
+                            <div class="m-t-md">
+                                <h3 class="product-main-price">{% if content_detail.approved %}Publicado{%else%}Pendiente de aprovación{%endif%}</h3>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="float-left p-3">
+                                    <button class="btn btn-success btn-xs" type="button">Categoría: {{content_detail.category}}</button>
+                                    <button class="btn btn-danger btn-xs" type="button">País: {{content_detail.country.name}}</button>
+                                    <button class="btn btn-warning btn-xs" type="button">Ciudad: {{content_detail.city.name}}</button>
+                                </div>
+                            </div>
+
+                            <h4>Contenido:</h4>
+                            <div class="small text-muted">
+                                {{content_detail.description|safe|escape}}
+                                <br/>
+                                <br/>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="ibox-footer">
+                    <span class="float-right">
+                        Fecha de publicación - <i class="fa fa-clock-o"></i> {{content_detail.date|date:"M d, Y h:i A"}}
+                    </span>
+                    Detalle de contenido
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Custom and plugin javascript -->
+<script src="{% static 'js/inspinia.js' %}"></script>
+<script src="{% static 'js/plugins/pace/pace.min.js' %}"></script>
+{% endblock %}

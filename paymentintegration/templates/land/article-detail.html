@@ -1,0 +1,292 @@
+{% extends 'land/landbase.html' %}
+{% load static %}
+{% block title %}Article-detail{% endblock %}
+{% block content %}
+<!--JRating-->
+<link rel="stylesheet" href="{% static 'css/jrating.css' %}">
+<link rel="stylesheet" href="{% static 'css/star-rating-svg.css' %}">
+<script src="{% static 'js/star-rating-svg.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/jrating.js' %}" type="text/javascript"></script>
+<div class="gray-bg" style="padding-top: 80px">
+    <div class="container">
+        <div class="wrapper wrapper-content  animated fadeInRight article">
+            <div class="row justify-content-md-center">
+                <div class="col-lg-10">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="float-right">
+                                <button class="btn btn-white btn-xs" type="button">Only Post</button>
+                                <button class="btn btn-white btn-xs" type="button">Voting</button>
+                            </div>
+                            <div class="text-center article-title">
+                            <span class="text-muted"><i class="fa fa-clock-o"></i> {{article_detail.date|date:"M d, Y h:i A"}}</span>
+                                <h1>
+                                    {{article_detail.title}}
+                                </h1>
+                            </div>
+                            <p>
+                                {{article_detail.description|safe|escape}}
+                            </p>
+                            
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span class="d-flex pb-3">
+                                        <span class="jRating" id="jRating1">
+                                            <span class="jRating-star" index="0"> </span>
+                                            <span class="jRating-number"></span> 
+                                        </span>
+                                        <span class="jRating" id="jRating2">
+                                            <span class="jRating-star" index="0"> </span>
+                                            <span class="jRating-number"></span> 
+                                        </span>
+                                        <span class="jRating" id="jRating3">
+                                            <span class="jRating-star" index="0"> </span>
+                                            <span class="jRating-number"></span> 
+                                        </span>
+                                        <span class="jRating" id="jRating4">
+                                            <span class="jRating-star" index="0"> </span>
+                                            <span class="jRating-number"></span>
+                                        </span>
+                                        <span class="jRating" id="jRating5">
+                                            <span class="jRating-star" index="0"> </span>
+                                            <span index="1" style="padding-left: 10px;font-size: 13px;font-weight: bold;">{{rating_avr}}</span>
+                                            <span index="1" style="padding-left: 5px;font-size: 12px;">({{rating_users}} críticas)</span>
+                                            <span class="jRating-number"></span> <!-- Don't delete. This element is necessary to jRating.js -->
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-3">
+                                        <h4>Clasificación:</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <span class="my-rating"></span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                        <h5>Etiquetas:</h5>
+                                        <button class="btn btn-white btn-xs" id="article_commit" type="button">cometer</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="small text-right">
+                                        <h5>Estadísticas:</h5>
+                                        <div> <i class="fa fa-comments-o"> </i> {{commit_count}} críticas </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <h2>Comentarios:</h2>
+                                    {% for article_c in article_commit %}
+                                        <div class="social-feed-box">
+                                            <div class="social-avatar">
+                                                <a href="" class="float-left">
+                                                    <img alt="image" src="{% static 'img/user.jpg' %}">
+                                                </a>
+                                                <div class="media-body">
+                                                    <a href="#">
+                                                        {{article_c.user.email}}
+                                                    </a>
+                                                    <small class="text-muted">{{article_c.date|date:"M d, Y h:i A"}}</small>
+                                                </div>
+                                            </div>
+                                            <div class="social-body">
+                                                <p>
+                                                    {{article_c.commit}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal fade" id="commit_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <i class="fa fa-pencil modal-icon"></i>
+                <h5 class="modal-title">Comprométete aquí.</h5>
+            </div>
+            <div class="modal-body">
+                <textarea type="text" placeholder="Write comment..." rows="6" cols="50" class="form-control" name="commit" id='commit' required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                <a href="#" id="commit_submit" type="button" class="btn btn-success">Aprobado</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Toast notifications -->
+<div style="position: absolute; top: 80px; right: 30px;">
+
+    <div class="toast toast1 toast-bootstrap" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <i class="fa fa-newspaper-o"> </i>
+            <strong class="mr-auto m-l-sm">Notificación</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" style="background-color: #1ab394;">
+            <p style="color: white;">Hola, acabas de calificar sobre este artículo. gracias.</p>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function(){
+        
+        var valueRating = parseFloat("{{rating_content}}".replace(",", "."));
+		if(valueRating == 5) {
+			new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 1, false);
+            new JRating(document.getElementById('jRating4'), 1, false);
+            new JRating(document.getElementById('jRating5'), 1, false);
+		}
+        else if (4 < valueRating &&  valueRating < 5) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 1, false);
+            new JRating(document.getElementById('jRating4'), 1, false);
+            new JRating(document.getElementById('jRating5'), 0.5, false);
+        } 
+        else if (valueRating == 4) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 1, false);
+            new JRating(document.getElementById('jRating4'), 1, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+        else if (3 < valueRating &&  valueRating < 4) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 1, false);
+            new JRating(document.getElementById('jRating4'), 0.5, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+        else if (valueRating == 3) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 1, false);
+            new JRating(document.getElementById('jRating4'), 0, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+        else if (2 < valueRating &&  valueRating < 3) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 0.5, false);
+            new JRating(document.getElementById('jRating4'), 0, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+        else if (valueRating == 2) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 1, false);
+            new JRating(document.getElementById('jRating3'), 0, false);
+            new JRating(document.getElementById('jRating4'), 0, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+        else if (1 < valueRating &&  valueRating < 2) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 0.5, false);
+            new JRating(document.getElementById('jRating3'), 0, false);
+            new JRating(document.getElementById('jRating4'), 0, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+        else if (valueRating == 1) {
+            new JRating(document.getElementById('jRating1'), 1, false);
+            new JRating(document.getElementById('jRating2'), 0, false);
+            new JRating(document.getElementById('jRating3'), 0, false);
+            new JRating(document.getElementById('jRating4'), 0, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+        }
+		else {
+			new JRating(document.getElementById('jRating1'), 0, false);
+            new JRating(document.getElementById('jRating2'), 0, false);
+            new JRating(document.getElementById('jRating3'), 0, false);
+            new JRating(document.getElementById('jRating4'), 0, false);
+            new JRating(document.getElementById('jRating5'), 0, false);
+		} 
+        var token = '{{csrf_token}}';
+        var rating_user = '{{rating_user}}';
+        let toast1 = $('.toast1');
+        toast1.toast({
+            delay: 5000,
+            animation: true
+        });
+        $(".my-rating").starRating({
+            starSize: 25,
+            initialRating: rating_user,
+            disableAfterRate: false,
+            useFullStars: true,
+            totalStars: 5,
+            strokeWidth: 0,
+            emptyColor: '#D8D8D8',
+            ratedColor: '#DF8771',
+            hoverColor: '#DF8771',
+            callback: function(currentRating, $el){
+                $.ajax({
+                    headers: { "X-CSRFToken": token },
+                    type: 'POST',
+                    url: '',
+                    data: 'ratingPoints='+currentRating+'&postID={{article_detail.id}}',
+                    success: function(msg) {
+                        if(msg = 'ok'){
+                            toast1.toast('show');
+                            console.log('You have rated');
+                            toast1.toast('show');
+                            setTimeout(function(){
+                                location.reload();
+                            }, 2000);
+                        }
+                        else {
+                            console.log('Some problem occured, please try again.');
+                        }
+                    }
+                });
+                
+            }
+        });
+    })
+    $("#article_commit").click(function(e){
+        $("#commit_modal").modal();
+    })
+    $("#commit_submit").click(function(evt){
+        evt.preventDefault();
+        var commitval = $("#commit").val();
+        var articleid = "{{article_detail.pk}}";
+        var userid = "{{request.user.id}}";
+        var url = '{% url "create_commit" %}';
+        var token = '{{csrf_token}}';
+        $.ajax({
+            headers: { "X-CSRFToken": token },
+            method: 'POST',
+            url: url,
+            data: {
+                'commit': commitval,
+                'article': articleid,
+                'user': userid
+            },
+            success: function(data) {
+                if(data == 'OK') {
+                    location.reload();
+                }
+            }
+        });
+    })
+</script>
+{% endblock %}
